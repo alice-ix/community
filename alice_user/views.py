@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.hashers import make_password, check_password
 from .models import AliceUser
+from .forms import LoginForm
 # Create your views here.
 
 def home(request):
@@ -20,23 +21,14 @@ def logout(request):
     return redirect('/')
 
 def login(request):
-    if request.method == 'GET':
-        return render(request, 'login.html')
-    elif request.method == 'POST':
-        userName = request.POST.get('userName', None)
-        passWord = request.POST.get('passWord', None)
-
-        res_data = {}
-        if not(userName and passWord):
-            res_data['error'] = '모든 값 입력해주시오'
-        else:
-            aliceUser = AliceUser.objects.get(userName=userName)
-            if check_password(passWord, aliceUser.passWord):
-                request.session['user'] = aliceUser.id
-                return redirect('/')
-            else:
-                res_data['error'] = '비밀번호 불일치'
-        return render(request, 'login.html', res_data) 
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return redirect('/')
+    else:
+        form = LoginForm()
+        
+    return render(request, 'login.html', {'form': form}) 
 
 
 def register(request):
