@@ -23,10 +23,13 @@
                        id="{{ field.id_for_label }}" 
                        placeholder="{{ field.label }}" 
                        name="{{ field.name }}">
-            </div>    
+            </div>
+            {% if field.errors %}
+            <span style="color: red;">{{ field.errors }}</span>
+            {% endif %}    
             {% endfor %}
             <button type="submit" class="btn btn-primary">로그인</button>
-            </form>
+        </form>
     </div>
 </div>
 {% endblock %}

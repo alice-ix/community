@@ -4,5 +4,6 @@ from alice_user.views import home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('alice_user/', include('alice_user.urls')),
+    path('board/', include('board.urls')),
     path('', home),
 ]
