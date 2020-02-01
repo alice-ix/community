@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.core.paginator import Paginator
 from django.http import Http404
 from alice_user.models import AliceUser
 from .models import Board
@@ -29,9 +30,9 @@ def boardwrite(request):
             board.title = form.cleaned_data['title']
             board.contents = form.cleaned_data['contents']
             board.writer = aliceUser
-            board.save
+            board.save()
 
-            return redirect('/board/list')
+            return redirect('/board/list/')
 
     else:
         form = BoardForm()
@@ -40,5 +41,12 @@ def boardwrite(request):
 
 
 def boardlist(request):
-    boards = Board.objects.all().order_by('-id')
+    if request.method =='POST':
+        return redirect('/board/write/')
+    else:
+        all_boards = Board.objects.all().order_by('-id')
+        page = int(request.GET.get('p', 1))
+        paginator = Paginator(all_boards, 2)
+
+        boards = paginator.get_page(page)
     return render(request, 'boardlist.html', {'boards': boards})
