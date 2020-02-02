@@ -6,13 +6,7 @@ from .forms import LoginForm
 # Create your views here.
 
 def home(request):
-    user_id = request.session.get('user')
-
-    if user_id:
-        aliceUser = AliceUser.objects.get(pk=user_id)
-        return HttpResponse(aliceUser.userName)
-
-    return HttpResponse('Home!')
+    return render(request, 'home.html')
 
 def logout(request):
     if request.session.get('user'):

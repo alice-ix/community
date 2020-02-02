@@ -41,12 +41,10 @@ def boardwrite(request):
 
 
 def boardlist(request):
-    if request.method =='POST':
-        return redirect('/board/write/')
-    else:
-        all_boards = Board.objects.all().order_by('-id')
-        page = int(request.GET.get('p', 1))
-        paginator = Paginator(all_boards, 2)
+    
+    all_boards = Board.objects.all().order_by('-id')
+    page = int(request.GET.get('p', 1))
+    paginator = Paginator(all_boards, 2)
 
-        boards = paginator.get_page(page)
+    boards = paginator.get_page(page)
     return render(request, 'boardlist.html', {'boards': boards})
