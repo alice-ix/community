@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'alice_user',
     'board',
+    'tag',
 ]
 
 MIDDLEWARE = [

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from django.http import Http404
 from alice_user.models import AliceUser
+from tag.models import Tag
 from .models import Board
 from .forms import BoardForm
 # Create your views here.
@@ -25,12 +26,20 @@ def boardwrite(request):
             user_id = request.session.get('user')
             aliceUser = AliceUser.objects.get(pk=user_id)
 
+            tags = form.cleaned_data['tags'].split(',')
 
             board = Board()
             board.title = form.cleaned_data['title']
             board.contents = form.cleaned_data['contents']
             board.writer = aliceUser
             board.save()
+
+            for tag in tags:
+                if not tag:
+                    continue
+
+                _tag, _ = Tag.objects.get_or_create(name=tag)
+                board.tags.add(_tag)
 
             return redirect('/board/list/')
 
